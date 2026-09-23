@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 function connecDB(){
-    mongoose.connect('mongodb://127.0.0.1:27017/NoExcuse')
+    mongoose.connect(process.env.mongoDB_URI)
     .then(()=>{
           console.log('MongoDB connected Successfully✅✅')
     }).catch((err)=>{
