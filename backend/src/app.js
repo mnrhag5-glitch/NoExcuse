@@ -57,8 +57,19 @@ let taskRoute = require('./routes/task.routes')
 app.use(cookie())
 
 app.use(cors({
-    origin: 'https://noexcuse-1.onrender.com',
-    credentials: true
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            process.env.FRONTEND_URL,
+            'https://noexcuse-1.onrender.com',
+            'http://localhost:5173',
+            'http://127.0.0.1:5173'
+        ].filter(Boolean)
+        if (!origin || allowedOrigins.includes(origin)) return callback(null, true)
+        return callback(new Error('Origin is not allowed by CORS'))
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
 }))
 
 

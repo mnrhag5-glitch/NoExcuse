@@ -2,6 +2,12 @@ let userModel = require('../module/user.model')
 let bcrypt = require('bcrypt')
 let jwt = require('jsonwebtoken')
 
+const cookieOptions = {
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: process.env.NODE_ENV === 'production'
+}
+
 
 
 const userRegistration = async(req,res)=>{
@@ -21,7 +27,7 @@ let hashedPassword = await bcrypt.hash(password, 10)
         password:hashedPassword
     })
     let token = jwt.sign({_id:user._id},process.env.jwt_SECRET)
-    res.cookie('token' , token)
+    res.cookie('token' , token, cookieOptions)
     res.status(201).json({
         message:'User register successfull..',
         user:{
@@ -54,7 +60,7 @@ const userLogIn = async(req,res)=>{
         _id:user._id
     },process.env.jwt_SECRET)
 
-    res.cookie('token' ,token)
+    res.cookie('token' ,token, cookieOptions)
     res.status(200).json({
         message:"user Login Successfull"
     ,user:{
@@ -65,7 +71,7 @@ const userLogIn = async(req,res)=>{
 }
 
 const userLogOut = async(req,res)=>{
-    res.clearCookie('token')
+    res.clearCookie('token', cookieOptions)
     res.status(200).json({
         message:"user LogOut successfull"
     })
@@ -86,5 +92,4 @@ module.exports = {
     userLogOut,
     userProfile,
 }
-
 

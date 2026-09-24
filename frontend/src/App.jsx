@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL
+  || (import.meta.env.PROD ? 'https://noexcuse-8u04.onrender.com/api' : 'http://localhost:3000/api')
 
 async function api(path, options = {}) {
   const response = await fetch(`${API_URL}${path}`, {
