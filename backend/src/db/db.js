@@ -21,6 +21,7 @@ async function connectDB() {
     })
 
     const connectionOptions = {
+        dbName: 'NoExcuse',
         serverSelectionTimeoutMS: 10000,
         connectTimeoutMS: 10000,
         socketTimeoutMS: 45000,
@@ -30,7 +31,7 @@ async function connectDB() {
     for (let attempt = 1; attempt <= 5; attempt += 1) {
         try {
             await mongoose.connect(mongoUri, connectionOptions)
-            console.log('MongoDB connected successfully')
+            console.log(`MongoDB connected successfully: ${mongoose.connection.name}`)
             return
         } catch (error) {
             await mongoose.disconnect()
