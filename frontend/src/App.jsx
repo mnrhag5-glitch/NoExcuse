@@ -192,9 +192,12 @@ function Dashboard({ user, onLogout }) {
       return
     }
     try {
-      await api(`/task/completeTask/${id}`, { method: 'PUT' })
+      const data = await api(`/task/completeTask/${id}`, { method: 'PUT' })
+      if (data.task) {
+        setTasks((currentTasks) => currentTasks.map((item) => item._id === id ? data.task : item))
+        setHistoryTasks((currentTasks) => currentTasks.map((item) => item._id === id ? data.task : item))
+      }
       setNotice('That is a win. Keep the streak alive.')
-      await loadTasks()
     } catch (taskError) {
       if (taskError.message.toLowerCase().includes('deadline')) setMissedTask(task)
       else setError(taskError.message)
